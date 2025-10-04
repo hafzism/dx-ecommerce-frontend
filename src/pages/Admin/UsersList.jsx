@@ -3,13 +3,16 @@ import Loader from "../Public/Loader";
 import api from "../../services/axios";
 import Navbar from "../../components/NavbarAdmin";
 import Footer from "../../components/Footer";
+import Pagination from "../../components/Pagination";
 
 const UsersList = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const userPerPage = 6
 
-  useEffect(() => {
+  useEffect(() => { 
     async function FetchData() {
       try {
         const res = await api.get("/admin/users");
@@ -19,12 +22,15 @@ const UsersList = () => {
         setError("failed to fetch products");
       } finally {
         setLoading(false);
-        console.log(loading);
+        // console.log(loading);
       }
     }
-
     FetchData();
   }, []);
+
+  const lastUserIndex = currentPage * userPerPage;
+  const firstUserIndex = lastUserIndex - userPerPage;
+  const currentUsers = users.slice(firstUserIndex, lastUserIndex);
 
   async function disableUser(id) {
     try {
@@ -69,8 +75,8 @@ const UsersList = () => {
               </tr>
             </thead>
             <tbody>
-              {users.length > 0 ? (
-                users.map((user) => (
+              {currentUsers.length > 0 ? (
+                currentUsers.map((user) => (
                   <tr key={user._id} className="text-center">
                     <td className="border px-4 py-2">{user.username}</td>
                     <td className="border px-4 py-2">{user.email}</td>
@@ -117,10 +123,11 @@ const UsersList = () => {
               )}
             </tbody>
           </table>
+          <Pagination userPerPage={userPerPage} totalUsers={users.length} currentPage={currentPage} setCurrentPage={setCurrentPage} ></Pagination> 
         </div>
       </div>
-      
-      <Footer/>
+
+      <Footer />
     </>
   );
 };
