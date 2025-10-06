@@ -50,7 +50,6 @@ const AdminOrders = () => {
               />
             ))}
           </div>
-          // ))
         ) : (
           <p className="text-gray-500">No orders found</p>
         )}

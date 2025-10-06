@@ -10,11 +10,10 @@ function CreateProduct() {
     description: "",
   });
   const [categories, setCategories] = useState([]);
-  const [image, setImage] = useState(null); // store file
+  const [image, setImage] = useState(null);
 
   const navigate = useNavigate();
 
-  // Fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -32,13 +31,12 @@ function CreateProduct() {
   };
 
   const handleFileChange = (e) => {
-    setImage(e.target.files[0]); // pick first selected file
+    setImage(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Use FormData for file + text
     const formData = new FormData();
     formData.append("name", form.name);
     formData.append("category", form.category);
@@ -71,7 +69,6 @@ function CreateProduct() {
           required
         />
 
-        {/* Category Dropdown */}
         <select
           name="category"
           value={form.category}
@@ -105,7 +102,6 @@ function CreateProduct() {
           className="w-full border px-3 py-2 rounded"
         />
 
-        {/* File Input */}
         <input
           type="file"
           name="image"

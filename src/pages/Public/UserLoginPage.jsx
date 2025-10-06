@@ -1,12 +1,15 @@
 import LoginForm from "../../components/LoginForm";
+import Navbar from "../../components/NavbarAdmin";
 import { useLogin } from "../../hooks/useLogin";
 import { useNavigate } from "react-router-dom";
 
 const UserLoginPage = () => {
-  const { login, error } = useLogin("/login", "/home");
+  const { login, error } = useLogin("/login", "/");
   const navigate = useNavigate();
 
   return (
+    <div>
+    <Navbar></Navbar>
     <LoginForm
       title="Login"
       onSubmit={login}
@@ -34,6 +37,7 @@ const UserLoginPage = () => {
         </>
       }
     />
+    </div>
   );
 };
 

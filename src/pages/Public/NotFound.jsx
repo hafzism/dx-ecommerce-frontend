@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function NotFound({auth}) {
 
-     let homePath = "/login"; // default for public
+     let homePath = "/login"; 
   if (auth?.role === "user") homePath = "/home";
   if (auth?.role === "admin") homePath = "/admin";
   return (

@@ -1,16 +1,39 @@
 import { useState } from "react";
 
 const LoginForm = ({ title, onSubmit, error, extraLinks }) => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
   function handleSubmit(e) {
     e.preventDefault();
-    onSubmit(email, password);
+
+    const trimmedUsername = username.trim();
+    const trimmedPassword = password.trim();
+
+    if (!trimmedUsername || !trimmedPassword) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    if (/\s/.test(trimmedUsername)) {
+      alert("Username cannot contain spaces.");
+      return;
+    }
+
+    if (trimmedPassword.length < 4) {
+      alert("Password must be at least 4 characters long.");
+      return;
+    }
+
+    onSubmit(trimmedUsername, trimmedPassword);
+
+    setUsername("");
+    setPassword("");
   }
-  
+
   return (
     <>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="text-red-500 text-center mb-2">{error}</p>}
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="bg-white p-8 rounded shadow-md w-full max-w-sm">
           <h2 className="text-2xl font-bold mb-6 text-center">{title}</h2>
@@ -20,18 +43,24 @@ const LoginForm = ({ title, onSubmit, error, extraLinks }) => {
               <label className="block mb-1 font-medium">Username</label>
               <input
                 type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="w-full border px-3 py-2 rounded focus:outline-none focus:ring focus:border-blue-300"
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your username"
               />
             </div>
-            <div>
+
+            <div className="mt-4">
               <label className="block mb-1 font-medium">Password</label>
               <input
                 type="password"
-                className="w-full border px-3 py-2 rounded focus:outline-none focus:ring focus:border-blue-300"
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="w-full border px-3 py-2 rounded focus:outline-none focus:ring focus:border-blue-300"
+                placeholder="Enter your password"
               />
             </div>
+
             <br />
             <button
               type="submit"
@@ -47,4 +76,5 @@ const LoginForm = ({ title, onSubmit, error, extraLinks }) => {
     </>
   );
 };
+
 export default LoginForm;

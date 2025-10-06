@@ -1,8 +1,13 @@
 import React from 'react'
+import Navbar from '../../components/NavbarAdmin'
+import Footer from '../../components/Footer'
 
 const UserHome = () => {
-  return (
+  return (<>
+    <Navbar role='user'></Navbar>
     <div>UserHome</div>
+    <Footer/>
+  </>
   )
 }
 

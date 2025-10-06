@@ -13,9 +13,8 @@ function EditProduct() {
     description: "",
   });
   const [categories, setCategories] = useState([]);
-  const [image, setImage] = useState(null); // for new image
+  const [image, setImage] = useState(null);
 
-  // Fetch product + categories
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -59,7 +58,7 @@ function EditProduct() {
     formData.append("category", form.category);
     formData.append("price", form.price);
     formData.append("description", form.description);
-    if (image) formData.append("image", image); // only if new image selected
+    if (image) formData.append("image", image);
 
     try {
       await api.put(`/admin/products/${id}`, formData, {

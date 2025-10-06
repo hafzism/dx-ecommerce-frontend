@@ -5,19 +5,21 @@ import UserHome from "./pages/Users/UserHome";
 import AdminLoginPage from "./pages/Admin/AdminLoginPage";
 import AdminHome from "./pages/Admin/AdminHome";
 import ProtectedRoute from "./components/ProtectedRoute";
-import NotAuth from "./pages/Public/NotAuth";
 import { checkAuth } from "./services/checkAuth";
 import UserLoginPage from "./pages/Public/UserLoginPage";
 import AdminProducts from "./pages/Admin/AdminProducts";
 import NotFound from "./pages/Public/NotFound";
 import Loader from "./pages/Public/Loader";
-import CreateProduct from "./pages/Admin/CreateProduct";
-import EditProduct from "./pages/Admin/EditProduct";
-import AdminCategories from "./pages/Admin/AdminCategories";
-import AdminCategoryEdit from "./pages/Admin/AdminCategoryEdit";
-import AdminAddCategory from "./pages/Admin/AdminAddCategory";
-import UsersList from "./pages/Admin/UsersList";
-import AdminOrders from "./pages/Admin/AdminOrders";
+import PublicHome from "./pages/Public/PublicHome";
+import Shop from "./pages/Public/Shop";
+import SpecificProducts from "./pages/Public/SpecificProducts";
+import PublicRoute from "./components/PublicRoute";
+import ViewCart from "./pages/Users/CartPage";
+import AdminRoutes from "./routes/AdminRoutes";
+import CheckOut from "./pages/Users/CheckOut";
+import OrderSuccess from "./pages/Users/OrderSuccess";
+import UserOrders from "./pages/Users/UserOrders";
+import OrderDetails from "./pages/Users/OrderDetails";
 
 function App() {
   const [auth, setAuth] = useState(null);
@@ -39,54 +41,99 @@ function App() {
   if (loading) return <Loader />;
 
   return (
-    <Routes>
-      <Route path="/login" element={<UserLoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route path="/admin/login" element={<AdminLoginPage />} />
-      <Route path="/notauth" element={<NotAuth />} />
+   <Routes>
+  {/* Public routes */}
+  <Route path="/" element={<PublicHome />} />
+  <Route path="/shop" element={<Shop />} />
+  <Route path="/shop/:id" element={<Shop />} />
+  <Route path="/product/:id" element={<SpecificProducts />} />
 
-      <Route
-        path="/home"
-        element={
-          <ProtectedRoute role="user" auth={auth}>
-            <UserHome />
-          </ProtectedRoute>
-        }
-      />
+  {/* Auth routes */}
 
-      <Route
-        path="/admin"
-        element={
-          <ProtectedRoute role="admin" auth={auth}>
-            <AdminHome />
-          </ProtectedRoute>
-        }
-      />
 
+  
+  <Route
+    path="/login"
+    element={
+      <PublicRoute auth={auth}>
+        <UserLoginPage />
+      </PublicRoute>
+    }
+  />
+
+
+
+  <Route
+    path="/register"
+    element={
+      <PublicRoute auth={auth}>
+        <RegisterPage />
+      </PublicRoute>
+    }
+  />
+  <Route
+    path="/admin/login"
+    element={
+      <PublicRoute auth={auth}>
+        <AdminLoginPage />
+      </PublicRoute>
+    }
+  />
+
+  {/* User routes */}
+  <Route
+    path="/cart"
+    element={
+      <ProtectedRoute role="user" auth={auth}>
+        <ViewCart />
+      </ProtectedRoute>
+    }
+  />
+    <Route
+    path="/placeorder"
+    element={
+      <ProtectedRoute role="user" auth={auth}>
+        <CheckOut />
+      </ProtectedRoute>
+    }
+  />
       <Route
-        path="/admin/products"
-        element={
-          <ProtectedRoute role="admin" auth={auth}>
-            <AdminProducts />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/categories"
-        element={
-          <ProtectedRoute role="admin" auth={auth}>
-            <AdminCategories />
-          </ProtectedRoute>
-        }
-      />
-      <Route path="/admin/products/create" element={<CreateProduct />} />
-      <Route path="/admin/products/edit/:id" element={<EditProduct />} />
-      <Route path="/admin/categories/edit/:id" element={<AdminCategoryEdit />} />
-      <Route path='/admin/category/create' element={<AdminAddCategory/>}/>
-            <Route path='/admin/users' element={<UsersList/>}/>
-            <Route path='/admin/orders' element={<AdminOrders/>}/>
-      <Route path="*" element={<NotFound auth={auth} />} />
-    </Routes>
+    path="/orders"
+    element={
+      <ProtectedRoute role="user" auth={auth}>
+        <UserOrders />
+      </ProtectedRoute>
+    }
+  />
+        <Route
+    path="/orders/:id"
+    element={
+      <ProtectedRoute role="user" auth={auth}>
+        <OrderDetails />
+      </ProtectedRoute>
+    }
+  />
+        <Route
+    path="/order-success"
+    element={
+      <ProtectedRoute role="user" auth={auth}>
+        <OrderSuccess />
+      </ProtectedRoute>
+    }
+  />
+
+  {/* Admin routes */}
+  <Route
+    path="/admin/*"
+    element={
+      <ProtectedRoute role="admin" auth={auth}>
+        <AdminRoutes />
+      </ProtectedRoute>
+    }
+  />
+
+  <Route path="*" element={<NotFound auth={auth} />} />
+</Routes>
   );
 }
 
