@@ -6,8 +6,10 @@ function CreateProduct() {
   const [form, setForm] = useState({
     name: "",
     category: "",
+    author: "",
     price: "",
     description: "",
+
   });
   const [categories, setCategories] = useState([]);
   const [image, setImage] = useState(null);
@@ -39,6 +41,7 @@ function CreateProduct() {
 
     const formData = new FormData();
     formData.append("name", form.name);
+    formData.append("author", form.author);
     formData.append("category", form.category);
     formData.append("price", form.price);
     formData.append("description", form.description);
@@ -64,6 +67,15 @@ function CreateProduct() {
           name="name"
           placeholder="Product Name"
           value={form.name}
+          onChange={handleChange}
+          className="w-full border px-3 py-2 rounded"
+          required
+        />
+                <input
+          type="text"
+          name="author"
+          placeholder="Author Name"
+          value={form.author}
           onChange={handleChange}
           className="w-full border px-3 py-2 rounded"
           required

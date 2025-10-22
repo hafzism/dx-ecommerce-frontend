@@ -1,61 +1,65 @@
 import React, { useEffect, useState } from "react";
 import api from "../services/axios";
-import ProductItem from "./ProductItem";
+import BookItem from "./BookItem";
 
 const LatestCollection = () => {
-  const [products, setProducts] = useState([])
+  const [products, setProducts] = useState([]);
 
-
-  useEffect(()=>{
+  useEffect(() => {
     async function fetchData() {
-try {
-        const res = await api.get("/products")
-        setProducts(res.data)
-} catch (error) {
-  console.log("network error");
-  
-}
+      try {
+        const res = await api.get("/products");
+        setProducts(res.data);
+      } catch (error) {
+        console.log("network error");
+      }
     }
-    fetchData()
-  },[])
+    fetchData();
+  }, []);
 
-  const latestP = products.slice(0,8)
-  
+  const latestBooks = products.slice(0, 4);
+
   return (
-    <>
-      <div className="my-10">
-        <div className="text-center py-8 text-3xl">
-
-
-          <div className="inline-flex gap-2 items-center mb-3">
-            <p className="text-gray-500">
-              {" "}
-              LATEST
-              <span className="text-gray-700 font-medium"> COLLECTIONS</span>
-            </p>
-            <p className="w-8 h-[1px] bg-gray-700"></p>
+    <div className="bg-[#FAF8F5] dark:bg-[#1A1A1A] py-16 sm:py-20 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        
+        {/* Section Header */}
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#8B4513] dark:text-[#C89F6F]">
+              Newly Launched
+            </h2>
           </div>
-
-<p className="w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600">
-Discover what’s new this season! From everyday essentials to statement styles, our latest collection has something special for everyone.
-</p>
-
-
+          <p className="text-sm sm:text-base text-[#6B6B6B] dark:text-[#A0A0A0] max-w-2xl mx-auto">
+            Discover our latest arrivals! Fresh releases from your favorite authors and exciting new voices in literature.
+          </p>
         </div>
 
-        <div className="grid grid-cols-4 gap-5 gap-y-4">
-          {
-            latestP.map((p,i)=>(
-              <ProductItem key={i} 
-              id={p._id} image={p.image} name={p.name} price={p.price}
-              >
+        {/* Books Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {latestBooks.map((book) => (
+            <BookItem
+              key={book._id}
+              id={book._id}
+              image={book.image}
+              name={book.name}
+              author={book.author}
+              price={book.price}
+            />
+          ))}
+        </div>
 
-              </ProductItem> 
-            ))
-          }
+        {/* View All Button */}
+        <div className="text-center mt-12">
+          <a
+            href="/shop"
+            className="inline-block bg-[#D4A574] dark:bg-[#C89F6F] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#C89F6F] dark:hover:bg-[#D4A574] transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+          >
+            View All Books
+          </a>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -9,8 +9,15 @@ import AdminCategoryEdit from '../pages/Admin/AdminCategoryEdit'
 import AdminAddCategory from '../pages/Admin/AdminAddCategory'
 import UsersList from '../pages/Admin/UsersList'
 import AdminOrders from '../pages/Admin/AdminOrders'
+import NotFound from '../pages/Public/NotFound'
+import { useAuth } from '../context/AuthContext'
 
 export default function AdminRoutes() {
+  const { auth, loading } = useAuth();
+
+
+  if (loading) return <Loader />;
+  
   return (
      <Routes>
       <Route path="/" element={<AdminHome />} />
@@ -22,6 +29,7 @@ export default function AdminRoutes() {
       <Route path="category/create" element={<AdminAddCategory />} />
       <Route path="users" element={<UsersList />} />
       <Route path="orders" element={<AdminOrders />} />
+      <Route path="*" element={<NotFound auth={auth} />} />
     </Routes>
   )
 }

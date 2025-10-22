@@ -12,20 +12,10 @@ const AdminLoginPage = () => {
     <>
     <Navbar></Navbar>
     <LoginForm
-      title="Login (Admin Only)"
+      title="Welcome,Admin"
       onSubmit={login}
       error={error}
-      extraLinks={
-        <p className="text-sm text-center text-gray-600">
-          User?{" "}
-          <span
-            className="hover:underline cursor-pointer"
-            onClick={() => navigate("/login")}
-            >
-            Login Here
-          </span>
-        </p>
-      }
+      extraLinks={""}
       />
       </>
 

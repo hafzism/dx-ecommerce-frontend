@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@variant dark (&:where(.dark, .dark *));
+
 @keyframes moving {
   50% {
     width: 100%;
@@ -9,3 +11,14 @@
     left: unset;
   }
 }
+
+*{
+  font-family: "Nova Square", sans-serif;
+}
+.swankyfont{
+  font-family: "Fontdiner Swanky", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+ 

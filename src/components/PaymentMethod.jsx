@@ -7,7 +7,7 @@ const PaymentMethod = ({ submitting }) => {
         <p className="text-gray-500">
           PAYMENT <span className="text-gray-700 font-medium">METHOD</span>
         </p>
-        <p className="w-8 sm:w-12 h-[1px] sm:h-[2px] bg-gray-700"></p>
+        <p className="w-8 sm:w-12 h-px sm:h-[2px] bg-gray-700"></p>
       </div>
 
       <div className="flex gap-3 flex-col lg:flex-row">

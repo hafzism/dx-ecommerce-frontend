@@ -8,6 +8,7 @@ function EditProduct() {
 
   const [form, setForm] = useState({
     name: "",
+    author: "",
     category: "",
     price: "", 
     description: "",
@@ -24,6 +25,7 @@ function EditProduct() {
         
         setForm({
           name: res.data.name,
+          author: res.data.author,
           category: res.data.category?._id || "",
           price: res.data.price,
           description: res.data.description,
@@ -55,6 +57,7 @@ function EditProduct() {
 
     const formData = new FormData();
     formData.append("name", form.name);
+    formData.append("author", form.author);
     formData.append("category", form.category);
     formData.append("price", form.price);
     formData.append("description", form.description);
@@ -81,6 +84,14 @@ function EditProduct() {
           value={form.name}
           onChange={handleChange}
           placeholder="Product Name"
+          className="w-full border px-3 py-2 rounded"
+        />
+                <input
+          type="text"
+          name="author"
+          value={form.author}
+          onChange={handleChange}
+          placeholder="Author Name"
           className="w-full border px-3 py-2 rounded"
         />
         <select

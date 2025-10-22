@@ -6,7 +6,7 @@ import api from "../../services/axios";
 import PaymentMethod from "../../components/PaymentMethod";
 import CartSummary from "../../components/CartSummary";
 import DeliveryForm from "../../components/DeliveryForm";
-
+import { ShoppingBag, BookOpen } from "lucide-react";
 
 const CheckOut = () => {
   const navigate = useNavigate();
@@ -92,23 +92,46 @@ const CheckOut = () => {
   return (
     <>
       <Navbar />
-      <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t"
-        >
-          <DeliveryForm form={form} handleChange={handleChange} />
-          <div className="mt-8">
-            <CartSummary
-              subtotal={subtotal}
-              shippingFee={shippingFee}
-              loadingCart={loadingCart}
-            />
-            <PaymentMethod submitting={submitting} />
+      <div className="min-h-screen bg-[#FAF8F5] dark:bg-[#1A1A1A] px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] py-10">
+        {/* Header */}
+        <div className="mb-10">
+          <div className="flex items-center gap-3 mb-3">
+            <ShoppingBag className="w-8 h-8 text-[#D4A574] dark:text-[#C89F6F]" />
+            <h1 className="text-3xl sm:text-4xl font-bold text-[#8B4513] dark:text-[#C89F6F]">
+              Checkout
+            </h1>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="h-[2px] w-20 bg-[#D4A574] dark:bg-[#C89F6F]"></div>
+            <p className="text-[#6B6B6B] dark:text-[#A0A0A0]">
+              Complete your order
+            </p>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="grid lg:grid-cols-3 gap-8">
+          {/* Left Column - Delivery Form */}
+          <div className="lg:col-span-2 bg-white dark:bg-[#242424] rounded-xl shadow-lg p-6 sm:p-8">
+            <DeliveryForm form={form} handleChange={handleChange} />
+          </div>
+
+          {/* Right Column - Summary & Payment */}
+          <div className="lg:col-span-1 space-y-6">
+            <div className="bg-white dark:bg-[#242424] rounded-xl shadow-lg p-6">
+              <CartSummary
+                subtotal={subtotal}
+                shippingFee={shippingFee}
+                loadingCart={loadingCart}
+              />
+            </div>
+            
+            <div className="bg-white dark:bg-[#242424] rounded-xl shadow-lg p-6">
+              <PaymentMethod submitting={submitting} />
+            </div>
           </div>
         </form>
-        <Footer />
       </div>
+      <Footer />
     </>
   );
 };

@@ -4,25 +4,25 @@ import api from "../../services/axios";
 import Navbar from "../../components/NavbarAdmin";
 import Footer from "../../components/Footer";
 import Pagination from "../../components/Pagination";
+import { UserCheck, UserX, Mail, Shield } from "lucide-react";
 
 const UsersList = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const userPerPage = 6
+  const userPerPage = 6;
 
-  useEffect(() => { 
+  useEffect(() => {
     async function FetchData() {
       try {
         const res = await api.get("/admin/users");
         setUsers(res.data.users);
       } catch (error) {
         console.log(error);
-        setError("failed to fetch products");
+        setError("Failed to fetch users");
       } finally {
         setLoading(false);
-        // console.log(loading);
       }
     }
     FetchData();
@@ -38,9 +38,10 @@ const UsersList = () => {
       setUsers((prev) =>
         prev.map((u) => (u._id === id ? { ...u, isEnabled: false } : u))
       );
-      alert("Disabled successfully");
+      alert("User disabled successfully");
     } catch (error) {
       console.log(error);
+      alert("Failed to disable user");
     }
   }
 
@@ -50,83 +51,149 @@ const UsersList = () => {
       setUsers((prev) =>
         prev.map((u) => (u._id === id ? { ...u, isEnabled: true } : u))
       );
-      alert("Enabled successfully");
+      alert("User enabled successfully");
     } catch (error) {
       console.log(error);
+      alert("Failed to enable user");
     }
   }
 
-  if (loading) return <Loader></Loader>;
-  if (error) return <p className="text-center text-red-500">{error}</p>;
+  if (loading) return <Loader />;
+
   return (
     <>
-      <Navbar role="admin"></Navbar>
-      <div className="p-6">
-        <h1 className="text-2xl font-bold mb-6">Admin - View Users</h1>
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border rounded-lg shadow">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="px-4 py-2 border">Username</th>
-                <th className="px-4 py-2 border">Email</th>
-                <th className="px-4 py-2 border">Role</th>
-                <th className="px-4 py-2 border">Enabled? </th>
-                <th className="px-4 py-2 border">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentUsers.length > 0 ? (
-                currentUsers.map((user) => (
-                  <tr key={user._id} className="text-center">
-                    <td className="border px-4 py-2">{user.username}</td>
-                    <td className="border px-4 py-2">{user.email}</td>
-                    <td className="border px-4 py-2">{user.role}</td>
-                    <td className="border px-4 py-2">
-                      {user.isEnabled ? (
-                        <span className="text-green-600 font-semibold">
-                          Enabled
-                        </span>
-                      ) : (
-                        <span className="text-red-600 font-semibold">
-                          Disabled
-                        </span>
-                      )}
-                    </td>
-                    <td className="border px-4 py-2 space-x-2">
-                      {user.isEnabled ? (
-                        <button
-                          onClick={() => disableUser(user._id)}
-                          className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                        >
-                          Disable
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => enableUser(user._id)}
-                          className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                        >
-                          Enable
-                        </button>
-                      )}
-                    </td>
+      <Navbar />
+      <div className="bg-[#FAF8F5] dark:bg-[#1A1A1A] min-h-screen transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+          
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl sm:text-4xl font-bold text-[#8B4513] dark:text-[#C89F6F] mb-2">
+              User Management
+            </h1>
+            <p className="text-[#6B6B6B] dark:text-[#A0A0A0]">
+              View and manage all registered users
+            </p>
+          </div>
+
+          {error && (
+            <div className="bg-red-100 dark:bg-red-900/20 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg mb-6">
+              {error}
+            </div>
+          )}
+
+          {/* Users Table */}
+          <div className="bg-[#FFFFFF] dark:bg-[#242424] rounded-xl shadow-lg overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="min-w-full">
+                <thead className="bg-[#D4A574] dark:bg-[#C89F6F]">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                      Username
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                      Email
+                    </th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                      Role
+                    </th>
+                    <th className="px-6 py-4 text-center text-sm font-semibold text-white">
+                      Status
+                    </th>
+                    <th className="px-6 py-4 text-center text-sm font-semibold text-white">
+                      Actions
+                    </th>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    className="px-4 py-4 text-center text-gray-500"
-                    colSpan="6"
-                  >
-                    No Users found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-          <Pagination userPerPage={userPerPage} totalUsers={users.length} currentPage={currentPage} setCurrentPage={setCurrentPage} ></Pagination> 
+                </thead>
+                <tbody className="divide-y divide-[#D4A574]/20 dark:divide-[#C89F6F]/20">
+                  {currentUsers.length > 0 ? (
+                    currentUsers.map((user) => (
+                      <tr
+                        key={user._id}
+                        className="hover:bg-[#FAF8F5] dark:hover:bg-[#1A1A1A] transition-colors"
+                      >
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2">
+                            <div className="w-10 h-10 rounded-full bg-[#D4A574] dark:bg-[#C89F6F] flex items-center justify-center text-white font-semibold">
+                              {user.username.charAt(0).toUpperCase()}
+                            </div>
+                            <span className="font-medium text-[#2D2D2D] dark:text-[#E5E5E5]">
+                              {user.username}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2 text-[#6B6B6B] dark:text-[#A0A0A0]">
+                            <Mail size={16} />
+                            <span className="text-sm">{user.email}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2">
+                            <Shield size={16} className="text-[#D4A574] dark:text-[#C89F6F]" />
+                            <span className="text-sm font-medium text-[#2D2D2D] dark:text-[#E5E5E5] capitalize">
+                              {user.role}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-center">
+                          {user.isEnabled ? (
+                            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-sm font-medium">
+                              <UserCheck size={14} />
+                              Enabled
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 text-sm font-medium">
+                              <UserX size={14} />
+                              Disabled
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 text-center">
+                          {user.isEnabled ? (
+                            <button
+                              onClick={() => disableUser(user._id)}
+                              className="bg-red-500 dark:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-600 dark:hover:bg-red-700 transition-all shadow-md hover:shadow-lg"
+                            >
+                              Disable
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => enableUser(user._id)}
+                              className="bg-green-500 dark:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-600 dark:hover:bg-green-700 transition-all shadow-md hover:shadow-lg"
+                            >
+                              Enable
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        className="px-6 py-12 text-center text-[#6B6B6B] dark:text-[#A0A0A0]"
+                        colSpan="5"
+                      >
+                        No users found
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination */}
+            <div className="border-t border-[#D4A574]/20 dark:border-[#C89F6F]/20 p-4">
+              <Pagination
+                userPerPage={userPerPage}
+                totalUsers={users.length}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+              />
+            </div>
+          </div>
         </div>
       </div>
-
       <Footer />
     </>
   );

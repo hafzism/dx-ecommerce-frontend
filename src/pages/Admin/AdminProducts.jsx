@@ -55,6 +55,7 @@ function AdminProducts() {
               <tr>
                 <th className="px-4 py-2 border">Image</th>
                 <th className="px-4 py-2 border">Name</th>
+                <th className="px-4 py-2 border">Author</th>
                 <th className="px-4 py-2 border">Category</th>
                 <th className="px-4 py-2 border">Price</th>
                 <th className="px-4 py-2 border">Description</th>
@@ -67,12 +68,13 @@ function AdminProducts() {
                   <tr key={product._id} className="text-center">
                     <td className="border px-4 py-2">
                       <img
-                        src={`http://localhost:3000${product.image}`}
+                        src={`${import.meta.env.VITE_API_URL}${product.image}`}
                         alt={product.name}
                         className="h-16 w-16 object-cover mx-auto rounded"
                       />
                     </td>
                     <td className="border px-4 py-2">{product.name}</td>
+                    <td className="border px-4 py-2">{product.author}</td>
                     <td className="border px-4 py-2">
                       {product.category?.name || "No Category"}
                     </td>
