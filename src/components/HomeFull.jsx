@@ -1,6 +1,5 @@
 import React from "react";
 import Footer from "./Footer";
-import heroimg from "../assets/hero_img-DOCOb6wn.jpg";
 import LatestCollection from "./LatestCollection";
 import OurPolicy from "./OurPolicy";
 import ExploreCategories from "./ExploreCategories";
