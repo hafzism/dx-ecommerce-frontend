@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/NavbarAdmin";
 import Footer from "../../components/Footer";
 import { User, Mail, Lock } from "lucide-react";
+import api from "../../services/axios";
 
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
@@ -49,7 +50,7 @@ const RegisterPage = () => {
     }
 
     try {
-      await axios.post("http://localhost:3000/register", {
+      await api.post("/register", {
         username: trimmedUsername,
         email: trimmedEmail,
         password: trimmedPassword,
