@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import api from "../../services/axios";
 import Navbar from "../../components/NavbarAdmin";
 import Footer from "../../components/Footer";
-import { useNavigate } from "react-router-dom";
+import CategorySkeleton from "../../components/CategorySkeleton";
 import { Plus, Edit, Trash2, Layers, Search } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const AdminCategories = () => {
   const [categories, setCategories] = useState([]);
@@ -51,27 +52,13 @@ const AdminCategories = () => {
     }
   }
 
-  if (loading) {
-    return (
-      <>
-        <Navbar />
-        <div className="min-h-screen bg-[#FAF8F5] dark:bg-[#1A1A1A] flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#D4A574] border-t-transparent mx-auto mb-4"></div>
-            <p className="text-[#6B6B6B] dark:text-[#A0A0A0] text-lg">Loading categories...</p>
-          </div>
-        </div>
-        <Footer />
-      </>
-    );
-  }
-
+  // Removed full spinner
   return (
     <>
       <Navbar />
       <div className="bg-[#FAF8F5] dark:bg-[#1A1A1A] min-h-screen transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-          
+
           {/* Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
             <div>
@@ -112,7 +99,13 @@ const AdminCategories = () => {
           </div>
 
           {/* Categories Grid */}
-          {filteredCategories.length > 0 ? (
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.from({ length: 9 }).map((_, idx) => (
+                <CategorySkeleton key={idx} />
+              ))}
+            </div>
+          ) : filteredCategories.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredCategories.map((cat) => (
                 <div

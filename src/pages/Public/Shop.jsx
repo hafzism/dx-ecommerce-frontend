@@ -4,6 +4,8 @@ import Navbar from "../../components/NavbarAdmin";
 import Footer from "../../components/Footer";
 import api from "../../services/axios";
 import BookItem2 from "../../components/BookItem2";
+import BookSkeleton from "../../components/BookSkeleton";
+import BookSkeletonList from "../../components/BookSkeletonList";
 import { Search, SlidersHorizontal, Grid3x3, List } from "lucide-react";
 import OurPolicy from "../../components/OurPolicy";
 
@@ -12,15 +14,20 @@ const Shop = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState("grid");
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [loadingProducts, setLoadingProducts] = useState(true);
   const { id } = useParams();
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
+        setLoadingCategories(true);
         const res = await api.get("/categories");
         setCategory(res.data);
       } catch (err) {
         console.error("Failed to fetch categories:", err);
+      } finally {
+        setLoadingCategories(false);
       }
     };
     fetchCategories();
@@ -29,11 +36,14 @@ const Shop = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        setLoadingProducts(true);
         const endpoint = id ? `/categories/${id}` : "/products";
         const res = await api.get(endpoint);
         setProducts(res.data.products || res.data);
       } catch (err) {
         console.error("Failed to fetch products:", err);
+      } finally {
+        setLoadingProducts(false);
       }
     };
     fetchProducts();
@@ -46,8 +56,8 @@ const Shop = () => {
   );
 
   // Get current category name
-  const currentCategory = id 
-    ? category.find(cat => cat._id === id)?.name 
+  const currentCategory = id
+    ? category.find(cat => cat._id === id)?.name
     : "All Books";
 
   return (
@@ -55,7 +65,7 @@ const Shop = () => {
       <Navbar />
       <div className="bg-[#FAF8F5] dark:bg-[#1A1A1A] min-h-screen transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-          
+
           {/* Page Header */}
           <div className="mb-8">
             <h1 className="text-3xl sm:text-4xl font-bold text-[#8B4513] dark:text-[#C89F6F] mb-2">
@@ -67,11 +77,11 @@ const Shop = () => {
           </div>
 
           <div className="flex flex-col lg:flex-row gap-8">
-            
+
             {/* Sidebar - Categories */}
             <aside className="lg:w-64 shrink-0">
               <div className="bg-[#FFFFFF] dark:bg-[#242424] rounded-xl p-6 shadow-lg sticky top-24">
-                
+
                 {/* Search Bar */}
                 <div className="mb-6">
                   <div className="relative">
@@ -98,36 +108,40 @@ const Shop = () => {
                 <div className="space-y-2">
                   <Link
                     to="/shop"
-                    className={`block px-4 py-3 rounded-lg transition-all duration-200 text-sm font-medium ${
-                      !id
+                    className={`block px-4 py-3 rounded-lg transition-all duration-200 text-sm font-medium ${!id
                         ? "bg-[#D4A574] dark:bg-[#C89F6F] text-white shadow-md"
                         : "bg-[#FAF8F5] dark:bg-[#1A1A1A] text-[#2D2D2D] dark:text-[#E5E5E5] hover:bg-[#D4A574] hover:text-white dark:hover:bg-[#C89F6F]"
-                    }`}
+                      }`}
                   >
                     All Categories
                   </Link>
 
-                  {category.map((cat) => (
-                    <Link
-                      key={cat._id}
-                      to={`/shop/${cat._id}`}
-                      className={`block px-4 py-3 rounded-lg transition-all duration-200 text-sm font-medium ${
-                        id === cat._id
-                          ? "bg-[#D4A574] dark:bg-[#C89F6F] text-white shadow-md"
-                          : "bg-[#FAF8F5] dark:bg-[#1A1A1A] text-[#2D2D2D] dark:text-[#E5E5E5] hover:bg-[#D4A574] hover:text-white dark:hover:bg-[#C89F6F]"
-                      }`}
-                      title={cat.description}
-                    >
-                      {cat.name}
-                    </Link>
-                  ))}
+                  {loadingCategories ? (
+                    Array.from({ length: 5 }).map((_, i) => (
+                      <div key={i} className="h-[46px] bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse w-full"></div>
+                    ))
+                  ) : (
+                    category.map((cat) => (
+                      <Link
+                        key={cat._id}
+                        to={`/shop/${cat._id}`}
+                        className={`block px-4 py-3 rounded-lg transition-all duration-200 text-sm font-medium ${id === cat._id
+                            ? "bg-[#D4A574] dark:bg-[#C89F6F] text-white shadow-md"
+                            : "bg-[#FAF8F5] dark:bg-[#1A1A1A] text-[#2D2D2D] dark:text-[#E5E5E5] hover:bg-[#D4A574] hover:text-white dark:hover:bg-[#C89F6F]"
+                          }`}
+                        title={cat.description}
+                      >
+                        {cat.name}
+                      </Link>
+                    ))
+                  )}
                 </div>
               </div>
             </aside>
 
             {/* Main Content */}
             <main className="flex-1">
-              
+
               {/* Toolbar */}
               <div className="bg-[#FFFFFF] dark:bg-[#242424] rounded-xl p-4 mb-6 shadow-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
@@ -143,22 +157,20 @@ const Shop = () => {
                 <div className="flex gap-2 bg-[#FAF8F5] dark:bg-[#1A1A1A] rounded-lg p-1">
                   <button
                     onClick={() => setViewMode("grid")}
-                    className={`p-2 rounded transition-all ${
-                      viewMode === "grid"
+                    className={`p-2 rounded transition-all ${viewMode === "grid"
                         ? "bg-[#D4A574] dark:bg-[#C89F6F] text-white"
                         : "text-[#6B6B6B] dark:text-[#A0A0A0] hover:text-[#D4A574] dark:hover:text-[#C89F6F]"
-                    }`}
+                      }`}
                     aria-label="Grid view"
                   >
                     <Grid3x3 size={20} />
                   </button>
                   <button
                     onClick={() => setViewMode("list")}
-                    className={`p-2 rounded transition-all ${
-                      viewMode === "list"
+                    className={`p-2 rounded transition-all ${viewMode === "list"
                         ? "bg-[#D4A574] dark:bg-[#C89F6F] text-white"
                         : "text-[#6B6B6B] dark:text-[#A0A0A0] hover:text-[#D4A574] dark:hover:text-[#C89F6F]"
-                    }`}
+                      }`}
                     aria-label="List view"
                   >
                     <List size={20} />
@@ -167,18 +179,26 @@ const Shop = () => {
               </div>
 
               {/* Products Grid/List */}
-              {filteredProducts.length === 0 ? (
+              {loadingProducts ? (
+                <div className={`grid gap-6 ${viewMode === "grid"
+                    ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                    : "grid-cols-1"
+                  }`}>
+                  {Array.from({ length: 8 }).map((_, i) => (
+                    viewMode === "grid" ? <BookSkeleton key={i} /> : <BookSkeletonList key={i} />
+                  ))}
+                </div>
+              ) : filteredProducts.length === 0 ? (
                 <div className="bg-[#FFFFFF] dark:bg-[#242424] rounded-xl p-12 text-center shadow-lg">
                   <p className="text-[#6B6B6B] dark:text-[#A0A0A0] text-lg">
                     {searchTerm ? `No books found matching "${searchTerm}"` : "No books available in this category."}
                   </p>
                 </div>
               ) : (
-                <div className={`grid gap-6 ${
-                  viewMode === "grid" 
-                    ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" 
+                <div className={`grid gap-6 ${viewMode === "grid"
+                    ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                     : "grid-cols-1"
-                }`}>
+                  }`}>
                   {filteredProducts.map((product) => (
                     <BookItem2
                       key={product._id}

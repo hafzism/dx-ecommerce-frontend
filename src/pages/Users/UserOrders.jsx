@@ -3,7 +3,8 @@ import api from "../../services/axios";
 import Navbar from "../../components/NavbarAdmin";
 import Footer from "../../components/Footer";
 import { useNavigate } from "react-router-dom";
-import { Package, Calendar, DollarSign, ChevronRight, ShoppingBag, BookOpen } from "lucide-react";
+import { Package, Calendar, DollarSign, ChevronRight, ShoppingBag } from "lucide-react";
+import BookDetailsSkeleton from "../../components/BookDetailsSkeleton";
 
 const UserOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -41,11 +42,8 @@ const UserOrders = () => {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen flex items-center justify-center bg-[#FAF8F5] dark:bg-[#1A1A1A]">
-          <div className="text-center">
-            <BookOpen className="w-12 h-12 text-[#D4A574] dark:text-[#C89F6F] animate-pulse mx-auto mb-4" />
-            <p className="text-[#2D2D2D] dark:text-[#E5E5E5] text-lg">Loading your orders...</p>
-          </div>
+        <div className="bg-[#FAF8F5] dark:bg-[#1A1A1A] min-h-screen transition-colors duration-300">
+          <BookDetailsSkeleton />
         </div>
         <Footer />
       </>

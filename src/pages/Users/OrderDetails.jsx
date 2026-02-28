@@ -3,17 +3,17 @@ import { useParams, useNavigate } from "react-router-dom";
 import api from "../../services/axios";
 import Navbar from "../../components/NavbarAdmin";
 import Footer from "../../components/Footer";
-import { 
-  Package, 
-  MapPin, 
-  Phone, 
-  Calendar, 
-  DollarSign, 
+import {
+  Package,
+  MapPin,
+  Phone,
+  Calendar,
+  DollarSign,
   ArrowLeft,
-  BookOpen,
   Truck,
   CheckCircle
 } from "lucide-react";
+import BookDetailsSkeleton from "../../components/BookDetailsSkeleton";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -63,11 +63,8 @@ const OrderDetails = () => {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen flex items-center justify-center bg-[#FAF8F5] dark:bg-[#1A1A1A]">
-          <div className="text-center">
-            <BookOpen className="w-12 h-12 text-[#D4A574] dark:text-[#C89F6F] animate-pulse mx-auto mb-4" />
-            <p className="text-[#2D2D2D] dark:text-[#E5E5E5] text-lg">Loading order details...</p>
-          </div>
+        <div className="bg-[#FAF8F5] dark:bg-[#1A1A1A] min-h-screen transition-colors duration-300">
+          <BookDetailsSkeleton />
         </div>
         <Footer />
       </>
@@ -123,7 +120,7 @@ const OrderDetails = () => {
                 Order ID: {order._id}
               </p>
             </div>
-            
+
             <div className={`px-4 py-2 rounded-lg border-2 flex items-center gap-2 ${getStatusColor(order.status)}`}>
               {getStatusIcon(order.status)}
               <span className="font-semibold uppercase text-sm">{order.status}</span>
@@ -141,7 +138,7 @@ const OrderDetails = () => {
                 <Package size={24} />
                 Order Information
               </h2>
-              
+
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="flex items-start gap-3">
                   <Calendar className="w-5 h-5 text-[#D4A574] dark:text-[#C89F6F] mt-1 shrink-0" />
@@ -177,7 +174,7 @@ const OrderDetails = () => {
                 <BookOpen size={24} />
                 Order Items
               </h2>
-              
+
               <div className="space-y-4">
                 {order.items.map((item, idx) => (
                   <div
@@ -217,7 +214,7 @@ const OrderDetails = () => {
                 <MapPin size={24} />
                 Delivery Address
               </h2>
-              
+
               <div className="space-y-3 text-sm">
                 <div className="p-4 bg-[#FAF8F5] dark:bg-[#1A1A1A] rounded-lg">
                   <p className="font-semibold text-[#2D2D2D] dark:text-[#E5E5E5] mb-2">

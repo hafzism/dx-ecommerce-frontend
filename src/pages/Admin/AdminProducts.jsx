@@ -3,6 +3,7 @@ import api from "../../services/axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/NavbarAdmin";
 import Footer from "../../components/Footer";
+import TableRowSkeleton from "../../components/TableRowSkeleton";
 import { Plus, Edit, Trash2, BookOpen, IndianRupee, Search } from "lucide-react";
 
 function AdminProducts() {
@@ -48,27 +49,13 @@ function AdminProducts() {
     }
   };
 
-  if (loading) {
-    return (
-      <>
-        <Navbar />
-        <div className="min-h-screen bg-[#FAF8F5] dark:bg-[#1A1A1A] flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#D4A574] border-t-transparent mx-auto mb-4"></div>
-            <p className="text-[#6B6B6B] dark:text-[#A0A0A0] text-lg">Loading products...</p>
-          </div>
-        </div>
-        <Footer />
-      </>
-    );
-  }
-
+  // Removed full screen loading spinner to render the table structure with bone rows instead
   return (
     <>
       <Navbar />
       <div className="bg-[#FAF8F5] dark:bg-[#1A1A1A] min-h-screen transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-          
+
           {/* Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
             <div>
@@ -123,7 +110,11 @@ function AdminProducts() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#D4A574]/20 dark:divide-[#C89F6F]/20">
-                  {filteredProducts.length > 0 ? (
+                  {loading ? (
+                    Array.from({ length: 5 }).map((_, i) => (
+                      <TableRowSkeleton key={i} />
+                    ))
+                  ) : filteredProducts.length > 0 ? (
                     filteredProducts.map((product) => (
                       <tr
                         key={product._id}

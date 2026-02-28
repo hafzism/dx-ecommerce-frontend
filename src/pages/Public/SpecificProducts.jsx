@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import api from '../../services/axios';
 import LatestCollection from '../../components/LatestCollection';
 import ExploreCategories from '../../components/ExploreCategories';
+import BookDetailsSkeleton from '../../components/BookDetailsSkeleton';
 
 export default function SpecificProducts() {
   const { id } = useParams();
@@ -33,11 +34,8 @@ export default function SpecificProducts() {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen bg-[#FAF8F5] dark:bg-[#1A1A1A] flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#D4A574] border-t-transparent mx-auto mb-4"></div>
-            <p className="text-[#6B6B6B] dark:text-[#A0A0A0] text-lg">Loading book details...</p>
-          </div>
+        <div className="bg-[#FAF8F5] dark:bg-[#1A1A1A] min-h-screen transition-colors duration-300">
+          <BookDetailsSkeleton />
         </div>
         <Footer />
       </>

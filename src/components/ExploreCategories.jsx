@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
 import api from "../services/axios";
 import CategoryCard from "./CategoryCard";
+import CategorySkeleton from "./CategorySkeleton";
 
 const ExploreCategories = () => {
   const [categories, setCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
       try {
+        setIsLoading(true);
         const res = await api.get("/categories");
         setCategories(res.data);
       } catch (error) {
         console.log("Failed to fetch categories");
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchData();
@@ -22,7 +27,7 @@ const ExploreCategories = () => {
   return (
     <div className="bg-[#FFFFFF] dark:bg-[#242424] py-16 sm:py-20 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        
+
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-[#8B4513] dark:text-[#C89F6F] mb-3">
@@ -35,9 +40,15 @@ const ExploreCategories = () => {
 
         {/* Categories Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {sixCat.map((cat) => (
-            <CategoryCard key={cat._id} {...cat} />
-          ))}
+          {isLoading ? (
+            Array.from({ length: 6 }).map((_, i) => (
+              <CategorySkeleton key={i} />
+            ))
+          ) : (
+            sixCat.map((cat) => (
+              <CategoryCard key={cat._id} {...cat} />
+            ))
+          )}
         </div>
       </div>
     </div>

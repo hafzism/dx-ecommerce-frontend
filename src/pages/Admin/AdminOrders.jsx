@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "../../services/axios";
 import Navbar from "../../components/NavbarAdmin";
 import OrderCard from "../../components/OrderCard";
+import OrderCardSkeleton from "../../components/OrderCardSkeleton";
 import Footer from "../../components/Footer";
 import { Package, Filter } from "lucide-react";
 
@@ -43,27 +44,13 @@ const AdminOrders = () => {
     );
   }
 
-  if (loading) {
-    return (
-      <>
-        <Navbar />
-        <div className="min-h-screen bg-[#FAF8F5] dark:bg-[#1A1A1A] flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#D4A574] border-t-transparent mx-auto mb-4"></div>
-            <p className="text-[#6B6B6B] dark:text-[#A0A0A0] text-lg">Loading orders...</p>
-          </div>
-        </div>
-        <Footer />
-      </>
-    );
-  }
-
+  // Removing the full screen loader, the grid handles it now
   return (
     <>
       <Navbar />
       <div className="bg-[#FAF8F5] dark:bg-[#1A1A1A] min-h-screen transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-          
+
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl sm:text-4xl font-bold text-[#8B4513] dark:text-[#C89F6F] mb-2">
@@ -93,11 +80,10 @@ const AdminOrders = () => {
                 <button
                   key={status}
                   onClick={() => setStatusFilter(status)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    statusFilter === status
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${statusFilter === status
                       ? 'bg-[#D4A574] dark:bg-[#C89F6F] text-white shadow-md'
                       : 'bg-[#FAF8F5] dark:bg-[#1A1A1A] text-[#2D2D2D] dark:text-[#E5E5E5] hover:bg-[#D4A574] hover:text-white dark:hover:bg-[#C89F6F]'
-                  }`}
+                    }`}
                 >
                   {status.charAt(0).toUpperCase() + status.slice(1)}
                 </button>
@@ -106,7 +92,13 @@ const AdminOrders = () => {
           </div>
 
           {/* Orders Grid */}
-          {filteredOrders.length > 0 ? (
+          {loading ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+              {Array.from({ length: 6 }).map((_, index) => (
+                <OrderCardSkeleton key={index} />
+              ))}
+            </div>
+          ) : filteredOrders.length > 0 ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               {filteredOrders.map((order) => (
                 <OrderCard

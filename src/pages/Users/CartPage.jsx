@@ -4,6 +4,7 @@ import api from "../../services/axios";
 import Navbar from "../../components/NavbarAdmin";
 import Footer from "../../components/Footer";
 import CartItem from "../../components/CartItem";
+import CartItemSkeleton from "../../components/CartItemSkeleton";
 import { ShoppingCart, BookOpen } from "lucide-react";
 
 const CartPage = () => {
@@ -70,10 +71,36 @@ const CartPage = () => {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen flex items-center justify-center bg-[#FAF8F5] dark:bg-[#1A1A1A]">
-          <div className="text-center">
-            <BookOpen className="w-12 h-12 text-[#D4A574] dark:text-[#C89F6F] animate-pulse mx-auto mb-4" />
-            <p className="text-[#2D2D2D] dark:text-[#E5E5E5] text-lg">Loading your cart...</p>
+        <div className="min-h-screen bg-[#FAF8F5] dark:bg-[#1A1A1A] px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] py-10">
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-3">
+              <ShoppingCart className="w-8 h-8 text-[#D4A574] dark:text-[#C89F6F]" />
+              <h1 className="text-3xl sm:text-4xl font-bold text-[#8B4513] dark:text-[#C89F6F]">
+                Your Cart
+              </h1>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="h-[2px] w-20 bg-[#D4A574] dark:bg-[#C89F6F]"></div>
+              <div className="h-4 bg-gray-200 dark:bg-gray-700 w-16 rounded animate-pulse"></div>
+            </div>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-4">
+              <div className="bg-white dark:bg-[#242424] rounded-xl shadow-lg p-6">
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <div key={index}>
+                    <CartItemSkeleton />
+                    {index < 2 && (
+                      <hr className="my-4 border-[#D4A574]/20 dark:border-[#C89F6F]/20" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="lg:col-span-1">
+              <div className="bg-white dark:bg-[#242424] rounded-xl shadow-lg p-6 h-64 animate-pulse"></div>
+            </div>
           </div>
         </div>
         <Footer />
